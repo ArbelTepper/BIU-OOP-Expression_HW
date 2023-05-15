@@ -78,7 +78,16 @@ public class Var implements Expression {
         if (this.variable.equals(var)) {
             return expression;
         } else {
-            return null;
+            return this;
         }
+    }
+    /**
+     * Returns a string representation of the expression.
+     *
+     * @return A string representation of the expression.
+     */
+    @Override
+    public String toString() {
+        return (this.variable);
     }
 }

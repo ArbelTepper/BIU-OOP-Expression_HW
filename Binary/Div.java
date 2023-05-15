@@ -1,15 +1,12 @@
 package Binary;
 
 import Miscellaneous.Expression;
+import Miscellaneous.Num;
 
 import java.util.List;
 import java.util.Map;
 
 public class Div extends BinaryExpression implements Expression {
-
-    private Expression expression1;
-    private Expression expression2;
-
     public Div (Expression expression1, Expression expression2) {
         super(expression1, expression2);
     }
@@ -25,7 +22,8 @@ public class Div extends BinaryExpression implements Expression {
      */
     @Override
     public double evaluate(Map<String, Double> assignment) throws Exception {
-        return 0;
+        return new Div(new Num(this.getExpression1().evaluate(assignment)) ,
+                new Num(this.getExpression2().evaluate(assignment))).evaluate();
     }
 
     /**
@@ -36,19 +34,25 @@ public class Div extends BinaryExpression implements Expression {
      */
 
     public double evaluate() throws Exception {
-        double exp2Result = expression2.evaluate();
+        double exp2Result = this.getExpression2().evaluate();
         if (exp2Result == 0) {
-            throw new ArithmeticException("Division by 0");
+            throw new ArithmeticException();
         }
-        double exp1Result = expression1.evaluate();
-
+        double exp1Result = this.getExpression1().evaluate();
         return  exp1Result / exp2Result;
     }
 
+    /**
+     * Returns a String representation of the Div object.
+     * The returned String will be in the format of "(expression1
+     * / expression2)".
+     *
+     * @return a String representing the Div object.
+     */
     @Override
     public String toString() {
-        return ("(" + this.expression1.toString() + " / "
-                + this.expression2.toString() + ")");
+        return ("(" + this.getExpression1().toString() + " / "
+                + this.getExpression2().toString() + ")");
     }
 
     /**
@@ -62,7 +66,7 @@ public class Div extends BinaryExpression implements Expression {
      */
     @Override
     public Expression assign(String var, Expression expression) {
-        return new Div(this.expression1.assign(var, expression),
-                this.expression2.assign(var, expression));
+        return new Div(this.getExpression1().assign(var, expression),
+                this.getExpression2().assign(var, expression));
     }
 }

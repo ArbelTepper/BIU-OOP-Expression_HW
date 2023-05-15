@@ -1,14 +1,12 @@
 package Binary;
 
 import Miscellaneous.Expression;
+import Miscellaneous.Num;
 
 import java.util.List;
 import java.util.Map;
 
 public class Plus extends BinaryExpression implements Expression {
-    private Expression expression1;
-    private Expression expression2;
-
     public Plus (Expression expression1, Expression expression2) {
         super(expression1, expression2);
     }
@@ -23,8 +21,10 @@ public class Plus extends BinaryExpression implements Expression {
      * @return the result of evaluating the expression
      * @throws Exception if the expression contains a variable not in the assignment
      */
+    @Override
     public double evaluate(Map<String, Double> assignment) throws Exception {
-        return 0;
+        return new Plus(new Num(this.getExpression1().evaluate(assignment)) ,
+                new Num(this.getExpression2().evaluate(assignment))).evaluate();
     }
 
     /**
@@ -34,18 +34,20 @@ public class Plus extends BinaryExpression implements Expression {
      * @throws Exception if the expression contains a variable not in the assignment
      */
     public double evaluate() throws Exception {
-        return expression1.evaluate() + expression2.evaluate();
+        return getExpression1().evaluate() + getExpression2().evaluate();
     }
 
     /**
-     * Returns a nice string representation of the expression.
+     * Returns a String representation of the Plus object.
+     * The returned String will be in the format of "(expression1
+     * + expression2)".
      *
-     * @return a string representation of the expression
+     * @return a String representing the Plus object.
      */
     @Override
     public String toString() {
-        return ("(" + this.expression1.toString() + " + "
-                + this.expression2.toString() + ")");
+        return ("(" + this.getExpression1().toString() + " + "
+                + this.getExpression2().toString() + ")");
     }
 
     /**
@@ -59,8 +61,7 @@ public class Plus extends BinaryExpression implements Expression {
      */
     @Override
     public Expression assign(String var, Expression expression) {
-        return new Plus(this.expression1.assign(var, expression),
-                this.expression2.assign(var, expression));
+        return new Plus(this.getExpression1().assign(var, expression),
+                this.getExpression2().assign(var, expression));
     }
-
 }

@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Sin extends UnaryExpression implements Expression {
-    private Expression expression;
-
     public Sin(Expression expression) {
         super(expression);
     }
@@ -27,7 +25,7 @@ public class Sin extends UnaryExpression implements Expression {
     public double evaluate(Map<String, Double> assignment) throws Exception {
         // evaluate returns a double, which is made into a Num object, which
         // is made into a Sin object, whose value can be evaluated.
-        return new Sin (new Num(this.expression.evaluate(assignment))).evaluate();
+        return new Sin (new Num(this.getExpression().evaluate(assignment))).evaluate();
     }
 
     /**
@@ -38,22 +36,20 @@ public class Sin extends UnaryExpression implements Expression {
      */
     @Override
     public double evaluate() throws Exception {
-        return Math.sin(this.expression.evaluate());
+        return Math.sin(Math.toDegrees((this.getExpression().evaluate())));
     }
 
     /**
-     * Returns a list of the variables in the expression.
+     * Returns a string representation of the expression.
      *
-     * @return a list of the variables in the expression
+     * @return A string representation of the expression.
      */
-
-
     @Override
     public String toString() {
-        return ("(sin(" + this.expression.toString() + "))");
+        return ("sin(" + this.getExpression().toString() + ")");
     }
 
     public Expression assign(String var, Expression expression) {
-        return new Sin (this.assign(var, expression));
+        return new Sin (this.getExpression().assign(var, expression));
     }
 }

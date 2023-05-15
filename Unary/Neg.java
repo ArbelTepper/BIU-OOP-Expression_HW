@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Neg extends UnaryExpression implements Expression {
-    private Expression expression;
-
     public Neg(Expression expression) {
         super(expression);
     }
@@ -27,7 +25,7 @@ public class Neg extends UnaryExpression implements Expression {
     public double evaluate(Map<String, Double> assignment) throws Exception {
         // evaluate returns a double, which is made into a Num object, which
         // is made into a Neg object, whose value can be evaluated.
-        return new Neg (new Num(this.expression.evaluate(assignment))).evaluate();
+        return new Neg (new Num(this.getExpression().evaluate(assignment))).evaluate();
     }
 
     /**
@@ -38,7 +36,7 @@ public class Neg extends UnaryExpression implements Expression {
      */
     @Override
     public double evaluate() throws Exception {
-        return -1 * this.expression.evaluate();
+        return -1 * this.getExpression().evaluate();
     }
 
     /**
@@ -48,7 +46,7 @@ public class Neg extends UnaryExpression implements Expression {
      */
     @Override
     public List<String> getVariables() {
-        return this.expression.getVariables();
+        return this.getExpression().getVariables();
     }
 
     /**
@@ -62,10 +60,16 @@ public class Neg extends UnaryExpression implements Expression {
      */
     @Override
     public Expression assign(String var, Expression expression) {
-        return new Neg(this.expression.assign(var, expression));
+        return new Neg(this.getExpression().assign(var, expression));
     }
+
+    /**
+     * Returns a string representation of the expression.
+     *
+     * @return A string representation of the expression.
+     */
     @Override
     public String toString() {
-        return ("(-" + this.expression.toString() + ")");
+        return ("(-" + this.getExpression().toString() + ")");
     }
 }

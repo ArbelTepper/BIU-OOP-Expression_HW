@@ -1,15 +1,13 @@
 package Binary;
 
 import Miscellaneous.Expression;
+import Miscellaneous.Num;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Pow extends BinaryExpression implements Expression {
-
-    private Expression expression1;
-    private Expression expression2;
 
     public Pow (Expression expression1, Expression expression2) {
         super(expression1, expression2);
@@ -27,7 +25,8 @@ public class Pow extends BinaryExpression implements Expression {
      */
     @Override
     public double evaluate(Map<String, Double> assignment) throws Exception {
-        return 0;
+        return new Pow(new Num(this.getExpression1().evaluate(assignment)) ,
+                new Num(this.getExpression2().evaluate(assignment))).evaluate();
     }
 
     /**
@@ -38,8 +37,8 @@ public class Pow extends BinaryExpression implements Expression {
      */
     @Override
     public double evaluate() throws Exception {
-        return Math.pow(this.expression1.evaluate(),
-                this.expression2.evaluate());
+        return Math.pow(this.getExpression1().evaluate(),
+                this.getExpression2().evaluate());
     }
 
     /**
@@ -53,12 +52,18 @@ public class Pow extends BinaryExpression implements Expression {
      */
     @Override
     public Expression assign(String var, Expression expression) {
-        return new Pow(expression1.assign(var, expression),
-                expression2.assign(var, expression));
+        return new Pow(this.getExpression1().assign(var, expression),
+                this.getExpression2().assign(var, expression));
     }
+
+    /**
+     * Returns a String representation of the Pow object.
+     * The returned String will be in the format of "(expression1^expression2)".
+     * @return a String representing the Pow object.
+     */
     @Override
     public String toString() {
-        return ("(" + this.expression1.toString() + "^"
-                + this.expression2.toString() + ")");
+        return ("(" + this.getExpression1().toString() + "^"
+                + this.getExpression2().toString() + ")");
     }
 }

@@ -1,5 +1,6 @@
 package Miscellaneous;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,7 @@ public class Num implements Expression {
      */
     @Override
     public List<String> getVariables() {
-        return null;
+        return new ArrayList<>();
     }
 
     /**
@@ -58,5 +59,22 @@ public class Num implements Expression {
     @Override
     public Expression assign(String var, Expression expression) {
         return this;
+    }
+
+    /**
+     * Returns a string representation of the expression.
+     *
+     * @return A string representation of the expression.
+     */
+    @Override
+    public String toString() {
+        if (this.num % 1 == 0) {
+            Integer toPrint = (int) this.num;
+            return (toPrint.toString());
+        } else {
+            Double toPrint = this.num;
+            return (toPrint.toString());
+        }
+
     }
 }

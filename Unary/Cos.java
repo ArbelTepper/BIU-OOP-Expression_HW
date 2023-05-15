@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Cos extends UnaryExpression implements Expression {
-    private Expression expression;
-
     public Cos(Expression expression) {
         super(expression);
     }
@@ -27,7 +25,7 @@ public class Cos extends UnaryExpression implements Expression {
     public double evaluate(Map<String, Double> assignment) throws Exception {
         // evaluate returns a double, which is made into a Num object, which
         // is made into a Cos object, whose value can be evaluated.
-        return new Cos (new Num(this.expression.evaluate(assignment))).evaluate();
+        return new Cos (new Num(this.getExpression().evaluate(assignment))).evaluate();
     }
 
     /**
@@ -38,7 +36,7 @@ public class Cos extends UnaryExpression implements Expression {
      */
     @Override
     public double evaluate() throws Exception {
-        return Math.cos(this.expression.evaluate());
+        return Math.cos(Math.toDegrees((this.getExpression().evaluate())));
     }
 
     /**
@@ -48,7 +46,7 @@ public class Cos extends UnaryExpression implements Expression {
      */
     @Override
     public List<String> getVariables() {
-        return this.expression.getVariables();
+        return this.getExpression().getVariables();
     }
 
     /**
@@ -62,10 +60,16 @@ public class Cos extends UnaryExpression implements Expression {
      */
     @Override
     public Expression assign(String var, Expression expression) {
-        return this.expression.assign(var, expression);
+        return this.getExpression().assign(var, expression);
     }
+
+    /**
+     * Returns a string representation of the expression.
+     *
+     * @return A string representation of the expression.
+     */
     @Override
     public String toString() {
-        return ("(cos(" + this.expression.toString() + "))");
+        return ("cos(" + this.getExpression().toString() + ")");
     }
 }
