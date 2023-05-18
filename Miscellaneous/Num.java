@@ -1,5 +1,7 @@
 package Miscellaneous;
 
+import Binary.Plus;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,10 @@ public class Num implements Expression {
 
     public Num (double num) {
         this.num = num;
+    }
+
+    public double getNum() {
+        return this.num;
     }
 
     /**
@@ -68,13 +74,26 @@ public class Num implements Expression {
      */
     @Override
     public String toString() {
-        if (this.num % 1 == 0) {
-            Integer toPrint = (int) this.num;
-            return (toPrint.toString());
-        } else {
-            Double toPrint = this.num;
-            return (toPrint.toString());
+        //if (this.num % 1 == 0) {
+        //    Integer toPrint = (int) this.num;
+        //    return (toPrint.toString());
+        //} else {
+        if (this.getNum() == Math.E) {
+            return ("e");
         }
+            Double toPrint = getNum();
+            return (toPrint.toString());
+        //}
+    }
 
+    @Override
+    public Expression differentiate(String var) {
+        return new Num(0);
+    }
+
+    // Returned a simplified version of the current expression.
+    public Expression simplify() {
+        return this;
     }
 }
+

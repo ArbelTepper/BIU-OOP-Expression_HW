@@ -2,8 +2,10 @@ package Binary;
 
 import Miscellaneous.Expression;
 import Miscellaneous.Num;
+import Unary.Neg;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class Minus extends BinaryExpression implements Expression {
     public Minus (Expression expression1, Expression expression2) {
@@ -62,5 +64,37 @@ public class Minus extends BinaryExpression implements Expression {
     public Expression assign(String var, Expression expression) {
         return new Minus(this.getExpression1().assign(var, expression),
                 this.getExpression2().assign(var, expression));
+    }
+
+    @Override
+    public Expression differentiate(String var) {
+        return new Minus(this.getExpression1().differentiate(var),
+                this.getExpression2().differentiate(var));
+    }
+
+    public Expression simplify() throws Exception { // shouldn't throw exception
+        if (this.getVariables() == null) {
+            return new Num(this.evaluate());
+        } else {
+            Expression simplified1 = this.getExpression1().simplify();
+            Expression simplified2 = this.getExpression2().simplify();
+            // simplified str is the string representations of the simplified
+            // expressions for comparison purpose.
+            String simplified1str = simplified1.toString();
+            String simplified2str = simplified2.toString();
+                // X-0
+            if (Objects.equals(simplified2str, new Num(0).toString())) {
+                return simplified1;
+                // 0-X
+            } else if (Objects.equals(simplified1str, new Num(0).toString())) {
+                return new Neg(simplified2);
+                // X-X
+            } else if (simplified1str.equals(simplified2str)) {
+                return new Num(0);
+                // All other cases
+            } else {
+                return new Minus(simplified1, simplified2);
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package Unary;
 
+import Binary.Mult;
 import Miscellaneous.Expression;
 import Miscellaneous.Num;
 
@@ -71,5 +72,17 @@ public class Neg extends UnaryExpression implements Expression {
     @Override
     public String toString() {
         return ("(-" + this.getExpression().toString() + ")");
+    }
+    @Override
+    public Expression differentiate(String var) {
+        return new Neg(this.getExpression().differentiate(var));
+    }
+
+    public Expression simplify() throws Exception { // shouldn't throw exception
+        if (this.getVariables() == null) {
+            return new Num(this.evaluate());
+        } else {
+            return new Neg(this.getExpression().simplify());
+        }
     }
 }

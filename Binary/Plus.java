@@ -2,6 +2,7 @@ package Binary;
 
 import Miscellaneous.Expression;
 import Miscellaneous.Num;
+import Unary.Cos;
 
 import java.util.List;
 import java.util.Map;
@@ -63,5 +64,20 @@ public class Plus extends BinaryExpression implements Expression {
     public Expression assign(String var, Expression expression) {
         return new Plus(this.getExpression1().assign(var, expression),
                 this.getExpression2().assign(var, expression));
+    }
+
+    @Override
+    public Expression differentiate(String var) {
+        return new Plus(this.getExpression1().differentiate(var),
+                this.getExpression2().differentiate(var));
+    }
+
+    public Expression simplify() throws Exception { // shouldn't throw exception
+        if (this.getVariables() == null) {
+            return new Num(this.evaluate());
+        } else {
+            return new Plus(this.getExpression1().simplify(),
+                    this.getExpression2().simplify());
+        }
     }
 }

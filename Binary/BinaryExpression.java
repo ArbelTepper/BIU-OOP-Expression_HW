@@ -1,6 +1,7 @@
 package Binary;
 
 import Miscellaneous.Expression;
+import Miscellaneous.Var;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +55,17 @@ public abstract class BinaryExpression {
      */
     public List<String> getVariables() {
         List<String> merge = new ArrayList<>();
+
+
+
+
         merge.addAll(expression1.getVariables());
-        merge.addAll(expression2.getVariables());
+        for (String variable:expression2.getVariables()) {
+            // if the list does not contain the variable already, add it.
+            if (!(merge.contains(variable))) {
+                merge.add(variable);
+            }
+        }
         return merge;
     }
 }

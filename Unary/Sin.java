@@ -1,7 +1,9 @@
 package Unary;
 
+import Binary.Mult;
 import Miscellaneous.Expression;
 import Miscellaneous.Num;
+import Miscellaneous.Var;
 
 import java.util.List;
 import java.util.Map;
@@ -36,7 +38,7 @@ public class Sin extends UnaryExpression implements Expression {
      */
     @Override
     public double evaluate() throws Exception {
-        return Math.sin(Math.toDegrees((this.getExpression().evaluate())));
+        return Math.sin(Math.toRadians((this.getExpression().evaluate())));
     }
 
     /**
@@ -51,5 +53,20 @@ public class Sin extends UnaryExpression implements Expression {
 
     public Expression assign(String var, Expression expression) {
         return new Sin (this.getExpression().assign(var, expression));
+    }
+
+    @Override
+    public Expression differentiate(String var) {
+        return new Mult(new Cos(this.getExpression()),
+                this.getExpression().differentiate(var));
+    }
+
+    // Returned a simplified version of the current expression.
+    public Expression simplify() throws Exception { // shouldn't throw exception
+        if (this.getVariables() == null) {
+            return new Num(this.evaluate());
+        } else {
+            return new Sin(this.getExpression().simplify());
+        }
     }
 }

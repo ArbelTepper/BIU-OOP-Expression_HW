@@ -4,8 +4,12 @@ import Miscellaneous.Expression;
 import Miscellaneous.Num;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class Log extends BinaryExpression implements Expression {
+
+    // expression 1 is the base
+    // expression 2 is the exponent
     public Log (Expression expression1, Expression expression2) {
         super(expression1, expression2);
     }
@@ -38,7 +42,7 @@ public class Log extends BinaryExpression implements Expression {
         double exp1Result = this.getExpression1().evaluate();
         double exp2Result = this.getExpression2().evaluate();
         if (exp1Result <= 0 || exp2Result <= 0) {
-            throw new ArithmeticException();
+            throw new RuntimeException();
         } else {
             return Math.log(exp2Result) / Math.log(exp1Result);
         }
@@ -70,5 +74,39 @@ public class Log extends BinaryExpression implements Expression {
     public Expression assign(String var, Expression expression) {
         return new Log(this.getExpression1().assign(var, expression),
                 this.getExpression2().assign(var, expression));
+    }
+
+    @Override
+    public Expression differentiate(String var) {
+
+        if (this.getExpression1().getVariables().contains(var)) {
+            return new Div(new Log(new Num(Math.E), this.getExpression2())
+                    , new Log(new Num(Math.E), this.getExpression1()))
+                    .differentiate(var);
+        } else {
+            return new Div(this.getExpression2().differentiate(var),
+                    new Mult(this.getExpression2(), new Log(new Num(Math.E),
+                            this.getExpression1())));
+        }
+    }
+
+    public Expression simplify() throws Exception { // shouldn't throw exception
+        if (this.getVariables() == null) {
+            return new Num(this.evaluate());
+        } else {
+            Expression simplified1 = this.getExpression1().simplify();
+            Expression simplified2 = this.getExpression2().simplify();
+            // simplified str is the string representations of the simplified
+            // expressions for comparison purpose.
+            String simplified1str = simplified1.toString();
+            String simplified2str = simplified2.toString();
+            // log (X,X)
+            if (Objects.equals(simplified1str, simplified2str)) {
+                return new Num(1);
+                // All other cases
+            } else {
+                return new Log(simplified1, simplified2);
+            }
+        }
     }
 }

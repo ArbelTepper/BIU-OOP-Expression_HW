@@ -47,9 +47,23 @@ public interface Expression {
      * var are replaced with the provided expression (Does not modify the
      * current expression).
      *
-     * @param var the name of the variable to be replaced
+     * @param var        the name of the variable to be replaced
      * @param expression the expression to replace the variable with
      * @return a new expression with the variable replaced
      */
     Expression assign(String var, Expression expression);
+
+    /**
+     * Differentiate expression.
+     *
+     * Returns the expression tree resulting from differentiating
+     * the current expression relative to variable `var`.
+     *
+     * @param var the var
+     * @return the expression
+     */
+    Expression differentiate(String var);
+
+    // Returned a simplified version of the current expression.
+    Expression simplify() throws Exception;
 }

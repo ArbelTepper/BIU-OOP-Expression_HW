@@ -37,8 +37,14 @@ public class Pow extends BinaryExpression implements Expression {
      */
     @Override
     public double evaluate() throws Exception {
-        return Math.pow(this.getExpression1().evaluate(),
-                this.getExpression2().evaluate());
+        if (this.getExpression1().equals(new Num(0)) && this.getExpression2().equals(new Num(0)))
+        {
+            throw new RuntimeException();
+        } else {
+            return Math.pow(this.getExpression1().evaluate(),
+                    this.getExpression2().evaluate());
+        }
+
     }
 
     /**
@@ -65,5 +71,23 @@ public class Pow extends BinaryExpression implements Expression {
     public String toString() {
         return ("(" + this.getExpression1().toString() + "^"
                 + this.getExpression2().toString() + ")");
+    }
+
+    @Override
+    public Expression differentiate(String var) {
+        return new Mult(new Pow(this.getExpression1(), this.getExpression2()),
+                new Plus(new Mult(this.getExpression1().differentiate(var),
+                        new Div(this.getExpression2(), this.getExpression1())),
+                        new Mult(this.getExpression2().differentiate(var),
+                                new Log(new Num(Math.E), this.getExpression1()))));
+    }
+
+    public Expression simplify() throws Exception { // shouldn't throw exception
+        if (this.getVariables() == null) {
+            return new Num(this.evaluate());
+        } else {
+            return new Pow(this.getExpression1().simplify(),
+                    this.getExpression2().simplify());
+        }
     }
 }

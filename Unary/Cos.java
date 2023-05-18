@@ -1,5 +1,6 @@
 package Unary;
 
+import Binary.Mult;
 import Miscellaneous.Expression;
 import Miscellaneous.Num;
 
@@ -36,7 +37,7 @@ public class Cos extends UnaryExpression implements Expression {
      */
     @Override
     public double evaluate() throws Exception {
-        return Math.cos(Math.toDegrees((this.getExpression().evaluate())));
+        return Math.cos(Math.toRadians((this.getExpression().evaluate())));
     }
 
     /**
@@ -71,5 +72,20 @@ public class Cos extends UnaryExpression implements Expression {
     @Override
     public String toString() {
         return ("cos(" + this.getExpression().toString() + ")");
+    }
+
+    @Override
+    public Expression differentiate(String var) {
+        return new Neg(new Mult(new Sin(this.getExpression()),
+                this.getExpression().differentiate(var)));
+    }
+
+    @Override
+    public Expression simplify() throws Exception { // shouldn't throw exception
+        if (this.getVariables() == null) {
+            return new Num(this.evaluate());
+        } else {
+            return new Cos(this.getExpression().simplify());
+        }
     }
 }

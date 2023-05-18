@@ -1,5 +1,7 @@
 package Miscellaneous;
 
+import Binary.Plus;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,10 @@ public class Var implements Expression {
 
     public Var (String variable) {
         this.variable = variable;
+    }
+
+    public String getVariable() {
+        return this.variable;
     }
 
     /**
@@ -26,7 +32,7 @@ public class Var implements Expression {
     public double evaluate(Map<String, Double> assignment) throws Exception {
         for (String key : assignment.keySet()) {
             // if this variable is a key in the map.
-            if (Objects.equals(key, this.variable)) {
+            if (Objects.equals(key, this.getVariable())) {
                 // create a new expression using the assign method with the
                 // matching key and its value.
                 Expression assigned =  this.assign(key,
@@ -36,7 +42,7 @@ public class Var implements Expression {
                 return assigned.evaluate();
             }
         }
-        throw new RuntimeException("The variable" + this.variable +
+        throw new RuntimeException("The variable" + this.getVariable() +
                 "has not been assigned so the expression cannot be " +
                 "evaluated.");
     }
@@ -60,7 +66,7 @@ public class Var implements Expression {
     @Override
     public List<String> getVariables() {
         List<String> variables = new ArrayList<>();
-        variables.add(this.variable);
+        variables.add(this.getVariable());
         return variables;
     }
 
@@ -75,7 +81,7 @@ public class Var implements Expression {
      */
     @Override
     public Expression assign(String var, Expression expression) {
-        if (this.variable.equals(var)) {
+        if (this.getVariable().equals(var)) {
             return expression;
         } else {
             return this;
@@ -88,6 +94,20 @@ public class Var implements Expression {
      */
     @Override
     public String toString() {
-        return (this.variable);
+        return (this.getVariable());
+    }
+
+    @Override
+    public Expression differentiate(String var) {
+        if (this.getVariable().equals(var)) {
+            return new Num(1);
+        } else {
+            return new Num(0);
+        }
+    }
+
+    // Returned a simplified version of the current expression.
+    public Expression simplify() {
+        return this;
     }
 }
