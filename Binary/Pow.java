@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Double.NaN;
+
 public class Pow extends BinaryExpression implements Expression {
 
     public Pow (Expression expression1, Expression expression2) {
@@ -37,12 +39,20 @@ public class Pow extends BinaryExpression implements Expression {
      */
     @Override
     public double evaluate() throws Exception {
-        if (this.getExpression1().equals(new Num(0)) && this.getExpression2().equals(new Num(0)))
+        if (this.getExpression1().equals(new Num(0))
+                && this.getExpression2().equals(new Num(0)))
         {
             throw new RuntimeException();
         } else {
-            return Math.pow(this.getExpression1().evaluate(),
+            double powerResult = Math.pow(this.getExpression1().evaluate(),
                     this.getExpression2().evaluate());
+            // if the power is not NaN
+            if (!Double.isNaN(powerResult))
+            {
+                return powerResult;
+            } else {
+                throw new RuntimeException();
+            }
         }
 
     }
@@ -83,7 +93,7 @@ public class Pow extends BinaryExpression implements Expression {
     }
 
     public Expression simplify() throws Exception { // shouldn't throw exception
-        if (this.getVariables() == null) {
+        if (this.getVariables().isEmpty()) {
             return new Num(this.evaluate());
         } else {
             return new Pow(this.getExpression1().simplify(),

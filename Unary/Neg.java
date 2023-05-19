@@ -79,7 +79,7 @@ public class Neg extends UnaryExpression implements Expression {
     }
 
     public Expression simplify() throws Exception { // shouldn't throw exception
-        if (this.getVariables() == null) {
+        if (this.getVariables().isEmpty()) {
             return new Num(this.evaluate());
         } else {
             return new Neg(this.getExpression().simplify());

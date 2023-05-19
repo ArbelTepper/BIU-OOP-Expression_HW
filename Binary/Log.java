@@ -41,7 +41,7 @@ public class Log extends BinaryExpression implements Expression {
 
         double exp1Result = this.getExpression1().evaluate();
         double exp2Result = this.getExpression2().evaluate();
-        if (exp1Result <= 0 || exp2Result <= 0) {
+        if (exp1Result <= 0 || exp1Result == 1|| exp2Result <= 0) {
             throw new RuntimeException();
         } else {
             return Math.log(exp2Result) / Math.log(exp1Result);
@@ -91,7 +91,7 @@ public class Log extends BinaryExpression implements Expression {
     }
 
     public Expression simplify() throws Exception { // shouldn't throw exception
-        if (this.getVariables() == null) {
+        if (this.getVariables().isEmpty()) {
             return new Num(this.evaluate());
         } else {
             Expression simplified1 = this.getExpression1().simplify();

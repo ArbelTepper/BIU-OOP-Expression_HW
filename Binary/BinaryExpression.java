@@ -55,10 +55,6 @@ public abstract class BinaryExpression {
      */
     public List<String> getVariables() {
         List<String> merge = new ArrayList<>();
-
-
-
-
         merge.addAll(expression1.getVariables());
         for (String variable:expression2.getVariables()) {
             // if the list does not contain the variable already, add it.

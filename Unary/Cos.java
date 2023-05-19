@@ -82,7 +82,7 @@ public class Cos extends UnaryExpression implements Expression {
 
     @Override
     public Expression simplify() throws Exception { // shouldn't throw exception
-        if (this.getVariables() == null) {
+        if (this.getVariables().isEmpty()) {
             return new Num(this.evaluate());
         } else {
             return new Cos(this.getExpression().simplify());

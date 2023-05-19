@@ -73,7 +73,7 @@ public class Minus extends BinaryExpression implements Expression {
     }
 
     public Expression simplify() throws Exception { // shouldn't throw exception
-        if (this.getVariables() == null) {
+        if (this.getVariables().isEmpty()) {
             return new Num(this.evaluate());
         } else {
             Expression simplified1 = this.getExpression1().simplify();

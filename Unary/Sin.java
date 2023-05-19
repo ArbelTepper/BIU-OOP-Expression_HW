@@ -63,7 +63,7 @@ public class Sin extends UnaryExpression implements Expression {
 
     // Returned a simplified version of the current expression.
     public Expression simplify() throws Exception { // shouldn't throw exception
-        if (this.getVariables() == null) {
+        if (this.getVariables().isEmpty()) {
             return new Num(this.evaluate());
         } else {
             return new Sin(this.getExpression().simplify());

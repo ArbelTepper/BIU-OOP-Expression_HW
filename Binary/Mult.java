@@ -73,29 +73,28 @@ public class Mult extends BinaryExpression implements Expression {
     }
 
     public Expression simplify() throws Exception { // shouldn't throw exception
-        if (this.getVariables() == null) {
+
+        Expression simplified1 = this.getExpression1().simplify();
+        Expression simplified2 = this.getExpression2().simplify();
+        // simplified str is the string representations of the simplified
+        // expressions for comparison purpose.
+        String simplified1str = simplified1.toString();
+        String simplified2str = simplified2.toString();
+
+        // 0*X or X*0
+        if (simplified1str.equals(new Num(0).toString())
+                || (simplified2str.equals(new Num(0).toString()))) {
+            return new Num(0);
+        } else if (Objects.equals(simplified1str, new Num(1).toString())) {
+            return simplified2;
+            // X*1
+        } else if (Objects.equals(simplified2str, new Num(1).toString())) {
+            return simplified1;
+        } else if (this.getVariables().isEmpty()) {
             return new Num(this.evaluate());
+            // All other cases
         } else {
-            Expression simplified1 = this.getExpression1().simplify();
-            Expression simplified2 = this.getExpression2().simplify();
-            // simplified str is the string representations of the simplified
-            // expressions for comparison purpose.
-            String simplified1str = simplified1.toString();
-            String simplified2str = simplified2.toString();
-                // 1*X
-            if (Objects.equals(simplified1str, new Num(1).toString())) {
-                return simplified2;
-                // X*1
-            } else if (Objects.equals(simplified2str, new Num(1).toString())) {
-                return simplified1;
-                // 0*X or X*0
-            } else if (simplified1str.equals(new Num(0).toString())
-                    || (simplified2str.equals(new Num(0).toString()))) {
-                return new Num(0);
-                // All other cases
-            } else {
-                return new Mult(simplified1, simplified2);
-            }
+            return new Mult(simplified1, simplified2);
         }
     }
 }

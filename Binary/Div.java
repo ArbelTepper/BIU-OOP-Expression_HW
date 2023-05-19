@@ -80,20 +80,24 @@ public class Div extends BinaryExpression implements Expression {
     }
 
     public Expression simplify() throws Exception { // shouldn't throw exception
-        if (this.getVariables() == null) {
+
+        Expression simplified1 = this.getExpression1().simplify();
+        Expression simplified2 = this.getExpression2().simplify();
+        // simplified str is the string representations of the simplified
+        // expressions for comparison purpose.
+        String simplified1str = simplified1.toString();
+        String simplified2str = simplified2.toString();
+
+        if (simplified2str.equals(new Num(0).toString()))
+            return this;
+        if (this.getVariables().isEmpty()) {
             return new Num(this.evaluate());
         } else {
-            Expression simplified1 = this.getExpression1().simplify();
-            Expression simplified2 = this.getExpression2().simplify();
-            // simplified str is the string representations of the simplified
-            // expressions for comparison purpose.
-            String simplified1str = simplified1.toString();
-            String simplified2str = simplified2.toString();
                 // X/X
             if (Objects.equals(simplified1str, simplified2str)) {
                 return new Num(1);
                 // X/1
-            } else if (Objects.equals(simplified1str, new Num(1).toString())) {
+            } else if (Objects.equals(simplified2str, new Num(1).toString())) {
                 return simplified1;
                 // All other cases
             } else {

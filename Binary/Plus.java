@@ -3,9 +3,11 @@ package Binary;
 import Miscellaneous.Expression;
 import Miscellaneous.Num;
 import Unary.Cos;
+import Unary.Neg;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Plus extends BinaryExpression implements Expression {
     public Plus (Expression expression1, Expression expression2) {
@@ -73,11 +75,25 @@ public class Plus extends BinaryExpression implements Expression {
     }
 
     public Expression simplify() throws Exception { // shouldn't throw exception
-        if (this.getVariables() == null) {
+        if (this.getVariables().isEmpty()) {
             return new Num(this.evaluate());
+
         } else {
-            return new Plus(this.getExpression1().simplify(),
-                    this.getExpression2().simplify());
+            Expression simplified1 = this.getExpression1().simplify();
+            Expression simplified2 = this.getExpression2().simplify();
+            // simplified str is the string representations of the simplified
+            // expressions for comparison purpose.
+            String simplified1str = simplified1.toString();
+            String simplified2str = simplified2.toString();
+                // X+0
+            if (Objects.equals(simplified2str, new Num(0).toString())) {
+                return simplified1;
+                // 0+X
+            } else if (Objects.equals(simplified1str, new Num(0).toString())) {
+                return simplified2;
+            } else {
+                return new Plus(simplified1, simplified2);
+            }
         }
     }
 }
