@@ -79,13 +79,14 @@ public class Log extends BinaryExpression implements Expression {
     @Override
     public Expression differentiate(String var) {
 
+        // all 10's used to be Math.E
         if (this.getExpression1().getVariables().contains(var)) {
-            return new Div(new Log(new Num(Math.E), this.getExpression2())
-                    , new Log(new Num(Math.E), this.getExpression1()))
+            return new Div(new Log(new Num(10), this.getExpression2())
+                    , new Log(new Num(10), this.getExpression1()))
                     .differentiate(var);
         } else {
             return new Div(this.getExpression2().differentiate(var),
-                    new Mult(this.getExpression2(), new Log(new Num(Math.E),
+                    new Mult(this.getExpression2(), new Log(new Num(10),
                             this.getExpression1())));
         }
     }

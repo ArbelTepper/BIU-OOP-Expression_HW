@@ -74,16 +74,12 @@ public class Num implements Expression {
      */
     @Override
     public String toString() {
-        //if (this.num % 1 == 0) {
-        //    Integer toPrint = (int) this.num;
-        //    return (toPrint.toString());
-        //} else {
-        if (this.getNum() == Math.E) {
-            return ("e");
-        }
+
+        //if (this.getNum() == Math.E) {
+        //    return ("e");
+        //}
             Double toPrint = getNum();
             return (toPrint.toString());
-        //}
     }
 
     @Override

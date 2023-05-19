@@ -1,3 +1,4 @@
+import Binary.Log;
 import Binary.Mult;
 import Binary.Plus;
 import Binary.Pow;
@@ -15,7 +16,7 @@ public class ExpressionsTest {
         Expression e = new Plus(new Mult(new Num(2), new Var("x")),
                 new Plus(new Sin(new Mult(new Num(4), new Var("y"))),
                         new Pow(new Var("e"),
-                        new Var("x"))));
+                                new Var("x"))));
         System.out.println(e.toString());
 
         Map<String, Double> assignment = new TreeMap<String, Double>();
@@ -28,5 +29,25 @@ public class ExpressionsTest {
         System.out.println(de);
 
         System.out.println(de.evaluate(assignment));
+
+
+
+        Expression right = new Pow(new Var("e"),
+                new Var("x"));
+
+        Expression rightde = right.differentiate("x");
+
+        System.out.println(rightde);
+        System.out.println(rightde.evaluate(assignment));
+
+        Expression myproblem = new Log(new Var("e"),
+                new Var("e"));
+
+        double eval = myproblem.evaluate(assignment);
+        System.out.println(eval);
+
+
+
+
     }
 }

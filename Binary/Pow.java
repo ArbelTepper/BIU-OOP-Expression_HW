@@ -2,13 +2,13 @@ package Binary;
 
 import Miscellaneous.Expression;
 import Miscellaneous.Num;
+import Miscellaneous.Var;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static java.lang.Double.NaN;
-
 public class Pow extends BinaryExpression implements Expression {
 
     public Pow (Expression expression1, Expression expression2) {
@@ -85,11 +85,12 @@ public class Pow extends BinaryExpression implements Expression {
 
     @Override
     public Expression differentiate(String var) {
+        //10 used to be math.E
         return new Mult(new Pow(this.getExpression1(), this.getExpression2()),
                 new Plus(new Mult(this.getExpression1().differentiate(var),
                         new Div(this.getExpression2(), this.getExpression1())),
                         new Mult(this.getExpression2().differentiate(var),
-                                new Log(new Num(Math.E), this.getExpression1()))));
+                                new Log(new Var("e"), this.getExpression1()))));
     }
 
     public Expression simplify() throws Exception { // shouldn't throw exception
