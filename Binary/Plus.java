@@ -2,15 +2,21 @@ package Binary;
 
 import Miscellaneous.Expression;
 import Miscellaneous.Num;
-import Unary.Cos;
-import Unary.Neg;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The type represents a addition object.
+ */
 public class Plus extends BinaryExpression implements Expression {
-    public Plus (Expression expression1, Expression expression2) {
+    /**
+     * Instantiates a new Plus.
+     *
+     * @param expression1 the expression 1
+     * @param expression2 the expression 2
+     */
+    public Plus(Expression expression1, Expression expression2) {
         super(expression1, expression2);
     }
 
@@ -26,7 +32,7 @@ public class Plus extends BinaryExpression implements Expression {
      */
     @Override
     public double evaluate(Map<String, Double> assignment) throws Exception {
-        return new Plus(new Num(this.getExpression1().evaluate(assignment)) ,
+        return new Plus(new Num(this.getExpression1().evaluate(assignment)),
                 new Num(this.getExpression2().evaluate(assignment))).evaluate();
     }
 
@@ -68,16 +74,31 @@ public class Plus extends BinaryExpression implements Expression {
                 this.getExpression2().assign(var, expression));
     }
 
+    /**
+     * Returns the derivative of the expression differentiated according to the
+     * specified variable inserted.
+     *
+     * @param var the variable by which the expression is differentiated
+     * @return the derivative of the expression
+     */
     @Override
     public Expression differentiate(String var) {
         return new Plus(this.getExpression1().differentiate(var),
                 this.getExpression2().differentiate(var));
     }
 
-    public Expression simplify() throws Exception { // shouldn't throw exception
+    /**
+     * Returns a simplified version of the current expression.
+     *
+     * @return the simplified expression
+     */
+    public Expression simplify() {
         if (this.getVariables().isEmpty()) {
-            return new Num(this.evaluate());
-
+            try {
+                return new Num(this.evaluate());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } else {
             Expression simplified1 = this.getExpression1().simplify();
             Expression simplified2 = this.getExpression2().simplify();

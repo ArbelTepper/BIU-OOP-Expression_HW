@@ -1,19 +1,30 @@
 package Miscellaneous;
 
-import Binary.Plus;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The type Var represents a Variable object.
+ */
 public class Var implements Expression {
     private String variable;
 
-    public Var (String variable) {
+    /**
+     * Instantiates a new Var.
+     *
+     * @param variable the variable
+     */
+    public Var(String variable) {
         this.variable = variable;
     }
 
+    /**
+     * Gets variable.
+     *
+     * @return the variable
+     */
     public String getVariable() {
         return this.variable;
     }
@@ -36,15 +47,15 @@ public class Var implements Expression {
                 // create a new expression using the assign method with the
                 // matching key and its value.
                 Expression assigned =  this.assign(key,
-                        new Num (assignment.get(key)));
+                        new Num(assignment.get(key)));
                 // returns the value of the new num made from the map, as a
                 // double rather than an Expression.
                 return assigned.evaluate();
             }
         }
-        throw new RuntimeException("The variable" + this.getVariable() +
-                "has not been assigned so the expression cannot be " +
-                "evaluated.");
+        // if this line has been reached it means there is a string in the
+        // map for which there is no matching Var.
+        throw new RuntimeException();
     }
 
     /**
@@ -97,6 +108,13 @@ public class Var implements Expression {
         return (this.getVariable());
     }
 
+    /**
+     * Returns the derivative of the expression differentiated according to the
+     * specified variable inserted.
+     *
+     * @param var the variable by which the expression is differentiated
+     * @return the derivative of the expression
+     */
     @Override
     public Expression differentiate(String var) {
         if (this.getVariable().equals(var)) {
@@ -106,7 +124,11 @@ public class Var implements Expression {
         }
     }
 
-    // Returned a simplified version of the current expression.
+    /**
+     * Returns a simplified version of the current expression.
+     *
+     * @return the simplified expression
+     */
     public Expression simplify() {
         return this;
     }

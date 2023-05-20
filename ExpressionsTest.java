@@ -1,4 +1,3 @@
-import Binary.Log;
 import Binary.Mult;
 import Binary.Plus;
 import Binary.Pow;
@@ -30,24 +29,6 @@ public class ExpressionsTest {
 
         System.out.println(de.evaluate(assignment));
 
-
-
-        Expression right = new Pow(new Var("e"),
-                new Var("x"));
-
-        Expression rightde = right.differentiate("x");
-
-        System.out.println(rightde);
-        System.out.println(rightde.evaluate(assignment));
-
-        Expression myproblem = new Log(new Var("e"),
-                new Var("e"));
-
-        double eval = myproblem.evaluate(assignment);
-        System.out.println(eval);
-
-
-
-
+        System.out.println(de.simplify());
     }
 }

@@ -54,16 +54,19 @@ public interface Expression {
     Expression assign(String var, Expression expression);
 
     /**
-     * Differentiate expression.
+     * Returns the derivative of the expression differentiated according to the
+     * specified variable inserted.
      *
-     * Returns the expression tree resulting from differentiating
-     * the current expression relative to variable `var`.
-     *
-     * @param var the var
-     * @return the expression
+     * @param var the variable by which the expression is differentiated
+     * @return the derivative of the expression
      */
     Expression differentiate(String var);
 
-    // Returned a simplified version of the current expression.
-    Expression simplify() throws Exception;
+    /**
+     * Returns a simplified version of the current expression.
+     *
+     * @return the simplified expression
+     * @throws Exception if an error occurs during simplification
+     */
+    Expression simplify();
 }

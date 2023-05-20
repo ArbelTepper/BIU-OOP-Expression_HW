@@ -7,7 +7,15 @@ import Miscellaneous.Num;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Cos represents a Cosine object.
+ */
 public class Cos extends UnaryExpression implements Expression {
+    /**
+     * Instantiates a new Cos.
+     *
+     * @param expression the expression
+     */
     public Cos(Expression expression) {
         super(expression);
     }
@@ -26,7 +34,7 @@ public class Cos extends UnaryExpression implements Expression {
     public double evaluate(Map<String, Double> assignment) throws Exception {
         // evaluate returns a double, which is made into a Num object, which
         // is made into a Cos object, whose value can be evaluated.
-        return new Cos (new Num(this.getExpression().evaluate(assignment))).evaluate();
+        return new Cos(new Num(this.getExpression().evaluate(assignment))).evaluate();
     }
 
     /**
@@ -74,16 +82,33 @@ public class Cos extends UnaryExpression implements Expression {
         return ("cos(" + this.getExpression().toString() + ")");
     }
 
+    /**
+     * Returns the derivative of the expression differentiated according to the
+     * specified variable inserted.
+     *
+     * @param var the variable by which the expression is differentiated
+     * @return the derivative of the expression
+     */
     @Override
     public Expression differentiate(String var) {
         return new Neg(new Mult(new Sin(this.getExpression()),
                 this.getExpression().differentiate(var)));
     }
 
+    /**
+     * Returns a simplified version of the current expression.
+     *
+     * @return the simplified expression
+     * @throws Exception if an error occurs during simplification
+     */
     @Override
-    public Expression simplify() throws Exception { // shouldn't throw exception
+    public Expression simplify() { // shouldn't throw exception
         if (this.getVariables().isEmpty()) {
-            return new Num(this.evaluate());
+            try {
+                return new Num(this.evaluate());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } else {
             return new Cos(this.getExpression().simplify());
         }

@@ -1,18 +1,29 @@
 package Miscellaneous;
 
-import Binary.Plus;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type represents a Number object.
+ */
 public class Num implements Expression {
     private double num;
 
-    public Num (double num) {
+    /**
+     * Instantiates a new Num.
+     *
+     * @param num the num
+     */
+    public Num(double num) {
         this.num = num;
     }
 
+    /**
+     * Gets num.
+     *
+     * @return the num
+     */
     public double getNum() {
         return this.num;
     }
@@ -82,12 +93,24 @@ public class Num implements Expression {
             return (toPrint.toString());
     }
 
+    /**
+     * Returns the derivative of the expression differentiated according to the
+     * specified variable inserted.
+     *
+     * @param var the variable by which the expression is differentiated
+     * @return the derivative of the expression
+     */
     @Override
     public Expression differentiate(String var) {
         return new Num(0);
     }
 
-    // Returned a simplified version of the current expression.
+    /**
+     * Returns a simplified version of the current expression.
+     *
+     * @return the simplified expression
+     * @throws Exception if an error occurs during simplification
+     */
     public Expression simplify() {
         return this;
     }

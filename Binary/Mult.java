@@ -6,8 +6,17 @@ import Miscellaneous.Num;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The type Mult.
+ */
 public class Mult extends BinaryExpression implements Expression {
-    public Mult (Expression expression1, Expression expression2) {
+    /**
+     * Instantiates a new represents a multiplication object.
+     *
+     * @param expression1 the expression 1
+     * @param expression2 the expression 2
+     */
+    public Mult(Expression expression1, Expression expression2) {
         super(expression1, expression2);
     }
 
@@ -23,7 +32,7 @@ public class Mult extends BinaryExpression implements Expression {
      */
     @Override
     public double evaluate(Map<String, Double> assignment) throws Exception {
-        return new Mult(new Num(this.getExpression1().evaluate(assignment)) ,
+        return new Mult(new Num(this.getExpression1().evaluate(assignment)),
                 new Num(this.getExpression2().evaluate(assignment))).evaluate();
     }
 
@@ -65,6 +74,13 @@ public class Mult extends BinaryExpression implements Expression {
                 this.getExpression2().assign(var, expression));
     }
 
+    /**
+     * Returns the derivative of the expression differentiated according to the
+     * specified variable inserted.
+     *
+     * @param var the variable by which the expression is differentiated
+     * @return the derivative of the expression
+     */
     @Override
     public Expression differentiate(String var) {
         return new Plus(new Mult(this.getExpression1().differentiate(var),
@@ -72,7 +88,12 @@ public class Mult extends BinaryExpression implements Expression {
                         this.getExpression2().differentiate(var)));
     }
 
-    public Expression simplify() throws Exception { // shouldn't throw exception
+    /**
+     * Returns a simplified version of the current expression.
+     *
+     * @return the simplified expression
+     */
+    public Expression simplify() {
 
         Expression simplified1 = this.getExpression1().simplify();
         Expression simplified2 = this.getExpression2().simplify();
@@ -91,7 +112,11 @@ public class Mult extends BinaryExpression implements Expression {
         } else if (Objects.equals(simplified2str, new Num(1).toString())) {
             return simplified1;
         } else if (this.getVariables().isEmpty()) {
-            return new Num(this.evaluate());
+            try {
+                return new Num(this.evaluate());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             // All other cases
         } else {
             return new Mult(simplified1, simplified2);

@@ -1,14 +1,21 @@
 package Unary;
 
 import Binary.Mult;
+
 import Miscellaneous.Expression;
 import Miscellaneous.Num;
-import Miscellaneous.Var;
 
-import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Sin represents a new Sine object.
+ */
 public class Sin extends UnaryExpression implements Expression {
+    /**
+     * Instantiates a new Sin.
+     *
+     * @param expression the expression
+     */
     public Sin(Expression expression) {
         super(expression);
     }
@@ -27,7 +34,7 @@ public class Sin extends UnaryExpression implements Expression {
     public double evaluate(Map<String, Double> assignment) throws Exception {
         // evaluate returns a double, which is made into a Num object, which
         // is made into a Sin object, whose value can be evaluated.
-        return new Sin (new Num(this.getExpression().evaluate(assignment))).evaluate();
+        return new Sin(new Num(this.getExpression().evaluate(assignment))).evaluate();
     }
 
     /**
@@ -51,20 +58,43 @@ public class Sin extends UnaryExpression implements Expression {
         return ("sin(" + this.getExpression().toString() + ")");
     }
 
+    /**
+     * Assigns a new expression to a specific variable.
+     *
+     * @param var        the variable which the value is assigned to
+     * @param expression the expression to assign
+     * @return a new expression with the assigned variable
+     */
     public Expression assign(String var, Expression expression) {
-        return new Sin (this.getExpression().assign(var, expression));
+        return new Sin(this.getExpression().assign(var, expression));
     }
 
+    /**
+     * Returns the derivative of the expression differentiated according to the
+     * specified variable inserted.
+     *
+     * @param var the variable by which the expression is differentiated
+     * @return the derivative of the expression
+     */
     @Override
     public Expression differentiate(String var) {
         return new Mult(new Cos(this.getExpression()),
                 this.getExpression().differentiate(var));
     }
 
-    // Returned a simplified version of the current expression.
-    public Expression simplify() throws Exception { // shouldn't throw exception
+    /**
+     * Returns a simplified version of the current expression.
+     *
+     * @return the simplified expression
+     * @throws Exception if an error occurs during simplification
+     */
+    public Expression simplify() {
         if (this.getVariables().isEmpty()) {
-            return new Num(this.evaluate());
+            try {
+                return new Num(this.evaluate());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } else {
             return new Sin(this.getExpression().simplify());
         }

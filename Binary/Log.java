@@ -2,15 +2,25 @@ package Binary;
 
 import Miscellaneous.Expression;
 import Miscellaneous.Num;
+import Miscellaneous.Var;
 
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The type represents a Logarithm object.
+ */
 public class Log extends BinaryExpression implements Expression {
 
+    /**
+     * Instantiates a new Log.
+     *
+     * @param expression1 the expression 1
+     * @param expression2 the expression 2
+     */
     // expression 1 is the base
     // expression 2 is the exponent
-    public Log (Expression expression1, Expression expression2) {
+    public Log(Expression expression1, Expression expression2) {
         super(expression1, expression2);
     }
 
@@ -26,7 +36,7 @@ public class Log extends BinaryExpression implements Expression {
      */
     @Override
     public double evaluate(Map<String, Double> assignment) throws Exception {
-        return new Log(new Num(this.getExpression1().evaluate(assignment)) ,
+        return new Log(new Num(this.getExpression1().evaluate(assignment)),
                 new Num(this.getExpression2().evaluate(assignment))).evaluate();
     }
 
@@ -41,7 +51,7 @@ public class Log extends BinaryExpression implements Expression {
 
         double exp1Result = this.getExpression1().evaluate();
         double exp2Result = this.getExpression2().evaluate();
-        if (exp1Result <= 0 || exp1Result == 1|| exp2Result <= 0) {
+        if (exp1Result <= 0 || exp1Result == 1 || exp2Result <= 0) {
             throw new RuntimeException();
         } else {
             return Math.log(exp2Result) / Math.log(exp1Result);
@@ -76,24 +86,40 @@ public class Log extends BinaryExpression implements Expression {
                 this.getExpression2().assign(var, expression));
     }
 
+    /**
+     * Returns the derivative of the expression differentiated according to the
+     * specified variable inserted.
+     *
+     * @param var the variable by which the expression is differentiated
+     * @return the derivative of the expression
+     */
     @Override
     public Expression differentiate(String var) {
 
         // all 10's used to be Math.E
         if (this.getExpression1().getVariables().contains(var)) {
-            return new Div(new Log(new Num(10), this.getExpression2())
-                    , new Log(new Num(10), this.getExpression1()))
+            return new Div(new Log(new Var("e"), this.getExpression2()),
+                    new Log(new Var("e"), this.getExpression1()))
                     .differentiate(var);
         } else {
             return new Div(this.getExpression2().differentiate(var),
-                    new Mult(this.getExpression2(), new Log(new Num(10),
+                    new Mult(this.getExpression2(), new Log(new Var("e"),
                             this.getExpression1())));
         }
     }
 
-    public Expression simplify() throws Exception { // shouldn't throw exception
+    /**
+     * Returns a simplified version of the current expression.
+     *
+     * @return the simplified expression
+     */
+    public Expression simplify() {
         if (this.getVariables().isEmpty()) {
-            return new Num(this.evaluate());
+            try {
+                return new Num(this.evaluate());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } else {
             Expression simplified1 = this.getExpression1().simplify();
             Expression simplified2 = this.getExpression2().simplify();

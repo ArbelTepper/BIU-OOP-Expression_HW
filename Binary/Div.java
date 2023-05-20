@@ -3,12 +3,21 @@ package Binary;
 import Miscellaneous.Expression;
 import Miscellaneous.Num;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The type Div represents a division object.
+ */
 public class Div extends BinaryExpression implements Expression {
-    public Div (Expression expression1, Expression expression2) {
+
+    /**
+     * Instantiates a new Div.
+     *
+     * @param expression1 the expression 1
+     * @param expression2 the expression 2
+     */
+    public Div(Expression expression1, Expression expression2) {
         super(expression1, expression2);
     }
     /**
@@ -23,7 +32,7 @@ public class Div extends BinaryExpression implements Expression {
      */
     @Override
     public double evaluate(Map<String, Double> assignment) throws Exception {
-        return new Div(new Num(this.getExpression1().evaluate(assignment)) ,
+        return new Div(new Num(this.getExpression1().evaluate(assignment)),
                 new Num(this.getExpression2().evaluate(assignment))).evaluate();
     }
 
@@ -71,15 +80,27 @@ public class Div extends BinaryExpression implements Expression {
                 this.getExpression2().assign(var, expression));
     }
 
+    /**
+     * Returns the derivative of the expression differentiated according to the
+     * specified variable inserted.
+     *
+     * @param var the variable by which the expression is differentiated
+     * @return the derivative of the expression
+     */
     @Override
     public Expression differentiate(String var) {
         return new Div(new Minus(new Mult(this.getExpression1().differentiate(var),
                 this.getExpression2()), new Mult(this.getExpression1(),
-                this.getExpression2().differentiate(var)))
-                ,new Pow(this.getExpression2(), new Num(2)));
+                this.getExpression2().differentiate(var))),
+                new Pow(this.getExpression2(), new Num(2)));
     }
 
-    public Expression simplify() throws Exception { // shouldn't throw exception
+    /**
+     * Returns a simplified version of the current expression.
+     *
+     * @return the simplified expression
+     */
+    public Expression simplify() {
 
         Expression simplified1 = this.getExpression1().simplify();
         Expression simplified2 = this.getExpression2().simplify();
@@ -88,10 +109,15 @@ public class Div extends BinaryExpression implements Expression {
         String simplified1str = simplified1.toString();
         String simplified2str = simplified2.toString();
 
-        if (simplified2str.equals(new Num(0).toString()))
+        if (simplified2str.equals(new Num(0).toString())) {
             return this;
+        }
         if (this.getVariables().isEmpty()) {
-            return new Num(this.evaluate());
+            try {
+                return new Num(this.evaluate());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } else {
                 // X/X
             if (Objects.equals(simplified1str, simplified2str)) {

@@ -1,7 +1,7 @@
 package Binary;
 
 import Miscellaneous.Expression;
-import Miscellaneous.Var;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public abstract class BinaryExpression {
      * @param expression1 The left operand of the expression.
      * @param expression2 The right operand of the expression.
      */
-    public BinaryExpression (Expression expression1, Expression expression2) {
+    public BinaryExpression(Expression expression1, Expression expression2) {
         this.expression1 = expression1;
         this.expression2 = expression2;
     }
@@ -35,7 +35,7 @@ public abstract class BinaryExpression {
      *
      * @return The first operand of the expression.
      */
-    public Expression getExpression1 (){
+    public Expression getExpression1() {
         return this.expression1;
     }
 
@@ -44,7 +44,7 @@ public abstract class BinaryExpression {
      *
      * @return The second operand of the expression.
      */
-    public Expression getExpression2 (){
+    public Expression getExpression2() {
         return this.expression2;
     }
 

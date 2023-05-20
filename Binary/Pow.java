@@ -4,14 +4,20 @@ import Miscellaneous.Expression;
 import Miscellaneous.Num;
 import Miscellaneous.Var;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import static java.lang.Double.NaN;
+/**
+ * The type represents a power object.
+ */
 public class Pow extends BinaryExpression implements Expression {
 
-    public Pow (Expression expression1, Expression expression2) {
+    /**
+     * Instantiates a new Power.
+     *
+     * @param expression1 the expression 1
+     * @param expression2 the expression 2
+     */
+    public Pow(Expression expression1, Expression expression2) {
         super(expression1, expression2);
     }
 
@@ -27,7 +33,7 @@ public class Pow extends BinaryExpression implements Expression {
      */
     @Override
     public double evaluate(Map<String, Double> assignment) throws Exception {
-        return new Pow(new Num(this.getExpression1().evaluate(assignment)) ,
+        return new Pow(new Num(this.getExpression1().evaluate(assignment)),
                 new Num(this.getExpression2().evaluate(assignment))).evaluate();
     }
 
@@ -40,15 +46,13 @@ public class Pow extends BinaryExpression implements Expression {
     @Override
     public double evaluate() throws Exception {
         if (this.getExpression1().equals(new Num(0))
-                && this.getExpression2().equals(new Num(0)))
-        {
+                && this.getExpression2().equals(new Num(0))) {
             throw new RuntimeException();
         } else {
             double powerResult = Math.pow(this.getExpression1().evaluate(),
                     this.getExpression2().evaluate());
             // if the power is not NaN
-            if (!Double.isNaN(powerResult))
-            {
+            if (!Double.isNaN(powerResult)) {
                 return powerResult;
             } else {
                 throw new RuntimeException();
@@ -83,6 +87,13 @@ public class Pow extends BinaryExpression implements Expression {
                 + this.getExpression2().toString() + ")");
     }
 
+    /**
+     * Returns the derivative of the expression differentiated according to the
+     * specified variable inserted.
+     *
+     * @param var the variable by which the expression is differentiated
+     * @return the derivative of the expression
+     */
     @Override
     public Expression differentiate(String var) {
         //10 used to be math.E
@@ -90,12 +101,22 @@ public class Pow extends BinaryExpression implements Expression {
                 new Plus(new Mult(this.getExpression1().differentiate(var),
                         new Div(this.getExpression2(), this.getExpression1())),
                         new Mult(this.getExpression2().differentiate(var),
-                                new Log(new Var("e"), this.getExpression1()))));
+                                new Log(new Var("e"),
+                                        this.getExpression1()))));
     }
 
-    public Expression simplify() throws Exception { // shouldn't throw exception
+    /**
+     * Returns a simplified version of the current expression.
+     *
+     * @return the simplified expression
+     */
+    public Expression simplify() {
         if (this.getVariables().isEmpty()) {
-            return new Num(this.evaluate());
+            try {
+                return new Num(this.evaluate());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } else {
             return new Pow(this.getExpression1().simplify(),
                     this.getExpression2().simplify());

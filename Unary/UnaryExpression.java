@@ -21,7 +21,7 @@ public abstract class UnaryExpression extends BaseExpression {
      * @param expression The expression that is operated on by the unary operator.
      */
 
-    public UnaryExpression (Expression expression) {
+    public UnaryExpression(Expression expression) {
         this.expression = expression;
     }
     /**
@@ -29,7 +29,7 @@ public abstract class UnaryExpression extends BaseExpression {
      *
      * @return The expression that is operated on by the unary operator.
      */
-    public Expression getExpression (){
+    public Expression getExpression() {
         return this.expression;
     }
 
